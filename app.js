@@ -148,13 +148,8 @@ function init() {
   renderSection();
 
 }
-
-
-window.addEventListener(
-  "DOMContentLoaded",
-  init
-);
-
+/* Start application */
+init();
 
 /* =========================================================
    SECTION MENU
@@ -251,9 +246,28 @@ function buildMenu() {
 
 function renderSection() {
 
+  if (
+    !assessmentSections ||
+    assessmentSections.length === 0
+  ) {
+    console.error("No assessment sections found.");
+    return;
+  }
+
+  if (
+    currentSection < 0 ||
+    currentSection >= assessmentSections.length
+  ) {
+    currentSection = 0;
+  }
+
   const section =
     assessmentSections[currentSection];
 
+  if (!section) {
+    console.error("Section not found.");
+    return;
+  }
 
   buildMenu();
 
