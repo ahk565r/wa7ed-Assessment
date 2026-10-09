@@ -41,9 +41,7 @@ languageSelect.value = language;
 function init() {
 
   buildMenu();
-
   applyLanguage();
-
   renderSection();
 
 }
