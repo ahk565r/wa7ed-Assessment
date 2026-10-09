@@ -3,99 +3,134 @@
 ========================================================= */
 
 
+/* =========================================================
+   STATE
+========================================================= */
+
 let currentSection =
   Number(
-    localStorage.getItem(
-      "wa7edCurrentSection"
-    )
+    localStorage.getItem("wa7edCurrentSection")
   ) || 0;
 
 
 let answers =
   JSON.parse(
-    localStorage.getItem(
-      "wa7edAnswers"
-    )
+    localStorage.getItem("wa7edAnswers")
   ) || {};
 
 
 let notes =
   JSON.parse(
-    localStorage.getItem(
-      "wa7edNotes"
-    )
+    localStorage.getItem("wa7edNotes")
   ) || {};
 
 
 let language =
-  localStorage.getItem(
-    "wa7edLanguage"
-  ) || "both";
-
+  localStorage.getItem("wa7edLanguage")
+  || "both";
 
 
 /* =========================================================
    DOM ELEMENTS
 ========================================================= */
 
-
 const questionsContainer =
-  document.getElementById(
-    "questionsContainer"
-  );
-
+  document.getElementById("questionsContainer");
 
 const sectionHeader =
-  document.getElementById(
-    "sectionHeader"
-  );
-
+  document.getElementById("sectionHeader");
 
 const sectionMenu =
-  document.getElementById(
-    "sectionMenu"
-  );
-
+  document.getElementById("sectionMenu");
 
 const previousBtn =
-  document.getElementById(
-    "previousBtn"
-  );
-
+  document.getElementById("previousBtn");
 
 const nextBtn =
-  document.getElementById(
-    "nextBtn"
-  );
-
+  document.getElementById("nextBtn");
 
 const saveBtn =
-  document.getElementById(
-    "saveBtn"
-  );
-
+  document.getElementById("saveBtn");
 
 const languageSelect =
-  document.getElementById(
-    "languageSelect"
-  );
-
+  document.getElementById("languageSelect");
 
 const sectionNotes =
-  document.getElementById(
-    "sectionNotes"
-  );
+  document.getElementById("sectionNotes");
 
 
-languageSelect.value =
-  language;
+if (languageSelect) {
+  languageSelect.value = language;
+}
 
+
+/* =========================================================
+   LANGUAGE HELPERS
+========================================================= */
+
+/*
+  Arabic:
+  returns Arabic only
+
+  English:
+  returns English only
+
+  Both:
+  returns Arabic | English
+*/
+
+function textByLanguage(ar, en) {
+
+  if (language === "ar") {
+    return ar;
+  }
+
+  if (language === "en") {
+    return en;
+  }
+
+  return `${ar} | ${en}`;
+}
+
+
+/*
+  Used when we need HTML
+  with separate AR / EN elements.
+*/
+
+function bilingualHTML(ar, en, tag = "span") {
+
+  if (language === "ar") {
+    return `
+      <${tag} class="ar">
+        ${ar}
+      </${tag}>
+    `;
+  }
+
+  if (language === "en") {
+    return `
+      <${tag} class="en">
+        ${en}
+      </${tag}>
+    `;
+  }
+
+  return `
+    <${tag} class="ar">
+      ${ar}
+    </${tag}>
+
+    <${tag} class="en">
+      ${en}
+    </${tag}>
+  `;
+}
 
 
 /* =========================================================
    INIT
 ========================================================= */
-
 
 function init() {
 
@@ -103,48 +138,10 @@ function init() {
     currentSection >=
     assessmentSections.length
   ) {
-
     currentSection = 0;
-
   }
 
-
-  applyLanguage(const heroBrandImage =
-  document.getElementById("heroBrandImage");
-
-if (heroBrandImage) {
-
-  if (language === "ar") {
-
-    heroBrandImage.src =
-      "Wa7ed-ar.png";
-
-    heroBrandImage.alt =
-      "و1حد للتقييمات";
-
-  }
-
-  else if (language === "en") {
-
-    heroBrandImage.src =
-      "Wa7ed-en.png";
-
-    heroBrandImage.alt =
-      "Wa7ed Assessment";
-
-  }
-
-  else {
-
-    heroBrandImage.src =
-      "Wa7ed-bilingual.png";
-
-    heroBrandImage.alt =
-      "Wa7ed Assessment | و1حد للتقييمات";
-
-  }
-
-});
+  applyLanguage();
 
   buildMenu();
 
@@ -153,32 +150,29 @@ if (heroBrandImage) {
 }
 
 
-
 window.addEventListener(
   "DOMContentLoaded",
   init
 );
 
 
-
 /* =========================================================
    SECTION MENU
 ========================================================= */
 
-
 function buildMenu() {
+
+  if (!sectionMenu) return;
+
 
   sectionMenu.innerHTML = "";
 
 
   assessmentSections.forEach(
-    (section,index) => {
-
+    (section, index) => {
 
       const item =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
 
       item.className =
@@ -190,45 +184,60 @@ function buildMenu() {
         );
 
 
-      item.innerHTML = `
+      if (language === "ar") {
 
-        <div class="ar">
-          ${index + 1}.
-          ${section.titleAr}
-        </div>
+        item.innerHTML = `
+          <div class="ar">
+            ${index + 1}. ${section.titleAr}
+          </div>
+        `;
 
-        <div class="en">
-          ${index + 1}.
-          ${section.titleEn}
-        </div>
+      }
 
-      `;
+      else if (language === "en") {
+
+        item.innerHTML = `
+          <div class="en">
+            ${index + 1}. ${section.titleEn}
+          </div>
+        `;
+
+      }
+
+      else {
+
+        item.innerHTML = `
+          <div class="ar">
+            ${index + 1}. ${section.titleAr}
+          </div>
+
+          <div class="en">
+            ${index + 1}. ${section.titleEn}
+          </div>
+        `;
+
+      }
 
 
       item.onclick = () => {
 
         saveSectionNotes();
 
-        currentSection =
-          index;
-
+        currentSection = index;
 
         localStorage.setItem(
           "wa7edCurrentSection",
           currentSection
         );
 
-
         renderSection();
 
-      scrollToFirstQuestion();
+        scrollToFirstQuestion();
 
       };
 
 
-      sectionMenu.appendChild(
-        item
-      );
+      sectionMenu.appendChild(item);
 
     }
   );
@@ -236,69 +245,119 @@ function buildMenu() {
 }
 
 
-
 /* =========================================================
    RENDER SECTION
 ========================================================= */
 
-
 function renderSection() {
 
   const section =
-    assessmentSections[
-      currentSection
-    ];
+    assessmentSections[currentSection];
 
 
   buildMenu();
 
 
-  sectionHeader.innerHTML = `
+  if (language === "ar") {
 
-    <div class="section-title">
+    sectionHeader.innerHTML = `
 
-      <h2 class="ar">
-        ${section.titleAr}
-      </h2>
+      <div class="section-title">
 
-      <h2 class="en">
-        ${section.titleEn}
-      </h2>
+        <h2 class="ar">
+          ${section.titleAr}
+        </h2>
+
+        ${
+          section.descriptionAr
+            ? `
+              <p class="ar">
+                ${section.descriptionAr}
+              </p>
+            `
+            : ""
+        }
+
+      </div>
+
+    `;
+
+  }
+
+  else if (language === "en") {
+
+    sectionHeader.innerHTML = `
+
+      <div class="section-title">
+
+        <h2 class="en">
+          ${section.titleEn}
+        </h2>
+
+        ${
+          section.descriptionEn
+            ? `
+              <p class="en">
+                ${section.descriptionEn}
+              </p>
+            `
+            : ""
+        }
+
+      </div>
+
+    `;
+
+  }
+
+  else {
+
+    sectionHeader.innerHTML = `
+
+      <div class="section-title">
+
+        <h2 class="ar">
+          ${section.titleAr}
+        </h2>
+
+        <h2 class="en">
+          ${section.titleEn}
+        </h2>
 
 
-      ${
-        section.descriptionAr
-          ? `
-            <p class="ar">
-              ${section.descriptionAr}
-            </p>
-          `
-          : ""
-      }
+        ${
+          section.descriptionAr
+            ? `
+              <p class="ar">
+                ${section.descriptionAr}
+              </p>
+            `
+            : ""
+        }
 
 
-      ${
-        section.descriptionEn
-          ? `
-            <p class="en">
-              ${section.descriptionEn}
-            </p>
-          `
-          : ""
-      }
+        ${
+          section.descriptionEn
+            ? `
+              <p class="en">
+                ${section.descriptionEn}
+              </p>
+            `
+            : ""
+        }
 
-    </div>
+      </div>
 
-  `;
+    `;
+
+  }
 
 
-
-  questionsContainer.innerHTML =
-    "";
+  questionsContainer.innerHTML = "";
 
 
   section.questions.forEach(
-    (question,index) => {
+    (question, index) => {
 
       questionsContainer.appendChild(
         createQuestion(
@@ -311,63 +370,127 @@ function renderSection() {
   );
 
 
-
   sectionNotes.value =
-    notes[
-      section.id
-    ] || "";
-
+    notes[section.id] || "";
 
 
   previousBtn.disabled =
     currentSection === 0;
 
 
+  updateNavigationButtons();
 
-  if (
-    currentSection ===
-    assessmentSections.length - 1
-  ) {
-
-    nextBtn.textContent =
-      "View Results / عرض النتائج";
-
-  }
-
-  else {
-
-    nextBtn.textContent =
-      "Next / التالي →";
-
-  }
-
-
+  updateNotesPlaceholder();
 
   updateProgress();
 
 }
 
 
+/* =========================================================
+   NAVIGATION BUTTON TEXT
+========================================================= */
+
+function updateNavigationButtons() {
+
+  if (language === "ar") {
+
+    previousBtn.textContent =
+      "السابق";
+
+    saveBtn.textContent =
+      "حفظ";
+
+    nextBtn.textContent =
+      currentSection ===
+      assessmentSections.length - 1
+        ? "عرض النتائج"
+        : "التالي";
+
+  }
+
+  else if (language === "en") {
+
+    previousBtn.textContent =
+      "← Previous";
+
+    saveBtn.textContent =
+      "Save";
+
+    nextBtn.textContent =
+      currentSection ===
+      assessmentSections.length - 1
+        ? "View Results"
+        : "Next →";
+
+  }
+
+  else {
+
+    previousBtn.textContent =
+      "← Previous / السابق";
+
+    saveBtn.textContent =
+      "Save / حفظ";
+
+    nextBtn.textContent =
+      currentSection ===
+      assessmentSections.length - 1
+        ? "View Results / عرض النتائج"
+        : "Next / التالي →";
+
+  }
+
+}
+
+
+/* =========================================================
+   NOTES PLACEHOLDER
+========================================================= */
+
+function updateNotesPlaceholder() {
+
+  if (!sectionNotes) return;
+
+
+  if (language === "ar") {
+
+    sectionNotes.placeholder =
+      "اختياري";
+
+  }
+
+  else if (language === "en") {
+
+    sectionNotes.placeholder =
+      "Optional";
+
+  }
+
+  else {
+
+    sectionNotes.placeholder =
+      "Optional / اختياري";
+
+  }
+
+}
+
 
 /* =========================================================
    QUESTION RENDERING
 ========================================================= */
-
 
 function createQuestion(
   question,
   index
 ) {
 
-
   const div =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
 
-  div.className =
-    "question";
+  div.className = "question";
 
 
   let html = `
@@ -376,50 +499,70 @@ function createQuestion(
       ${question.id}
     </div>
 
-
-    <h3 class="ar">
-      ${question.ar}
-    </h3>
-
-
-    <div class="english en">
-      ${question.en}
-    </div>
-
   `;
 
 
+  if (language === "ar") {
+
+    html += `
+
+      <h3 class="ar">
+        ${question.ar}
+      </h3>
+
+    `;
+
+  }
+
+  else if (language === "en") {
+
+    html += `
+
+      <h3 class="en">
+        ${question.en}
+      </h3>
+
+    `;
+
+  }
+
+  else {
+
+    html += `
+
+      <h3 class="ar">
+        ${question.ar}
+      </h3>
+
+      <div class="english en">
+        ${question.en}
+      </div>
+
+    `;
+
+  }
+
 
   if (
-    question.type ===
-    "scale"
+    question.type === "scale"
   ) {
 
     html +=
-      createScale(
-        question
-      );
+      createScale(question);
 
   }
-
-
 
   else if (
-    question.type ===
-    "select"
+    question.type === "select"
   ) {
 
     html +=
-      createSelect(
-        question
-      );
+      createSelect(question);
 
   }
 
 
-
-  div.innerHTML =
-    html;
+  div.innerHTML = html;
 
 
   return div;
@@ -427,16 +570,11 @@ function createQuestion(
 }
 
 
-
 /* =========================================================
    SCALE
 ========================================================= */
 
-
-function createScale(
-  question
-) {
-
+function createScale(question) {
 
   const labels = [
 
@@ -479,10 +617,8 @@ function createScale(
   ];
 
 
-
   let html =
     `<div class="scale">`;
-
 
 
   labels.forEach(
@@ -494,16 +630,50 @@ function createScale(
       ]
     ) => {
 
-
       const checked =
-        answers[
-          question.id
-        ] == value
+        answers[question.id] == value
+          ? "checked"
+          : "";
 
-        ? "checked"
 
-        : "";
+      let labelText = "";
 
+
+      if (language === "ar") {
+
+        labelText = `
+          <small class="ar">
+            ${arabic}
+          </small>
+        `;
+
+      }
+
+      else if (language === "en") {
+
+        labelText = `
+          <small class="en">
+            ${english}
+          </small>
+        `;
+
+      }
+
+      else {
+
+        labelText = `
+
+          <small class="ar">
+            ${arabic}
+          </small>
+
+          <small class="en">
+            ${english}
+          </small>
+
+        `;
+
+      }
 
 
       html += `
@@ -511,15 +681,10 @@ function createScale(
         <label>
 
           <input
-
             type="radio"
-
             name="${question.id}"
-
             value="${value}"
-
             ${checked}
-
             onchange="
               saveAnswer(
                 '${question.id}',
@@ -527,7 +692,6 @@ function createScale(
               )
             "
           >
-
 
           <span>
 
@@ -537,13 +701,7 @@ function createScale(
 
             <br>
 
-            <small class="ar">
-              ${arabic}
-            </small>
-
-            <small class="en">
-              ${english}
-            </small>
+            ${labelText}
 
           </span>
 
@@ -555,9 +713,7 @@ function createScale(
   );
 
 
-
-  html +=
-    `</div>`;
+  html += `</div>`;
 
 
   return html;
@@ -565,25 +721,30 @@ function createScale(
 }
 
 
-
 /* =========================================================
    SELECT
 ========================================================= */
 
+function createSelect(question) {
 
-function createSelect(
-  question
-) {
+  const placeholder =
+    language === "ar"
+
+      ? "اختر"
+
+      : language === "en"
+
+        ? "Select"
+
+        : "اختر | Select";
 
 
   let html = `
 
     <select
-
       class="form-select"
 
       onchange="
-
         saveAnswer(
           '${question.id}',
           this.value
@@ -593,35 +754,58 @@ function createSelect(
           '${question.id}',
           this.value
         );
-
       "
     >
 
-
       <option value="">
-        Select / اختر
+        ${placeholder}
       </option>
 
   `;
 
 
-
   question.options.forEach(
     option => {
-
 
       const value =
         option[0];
 
 
+      const ar =
+        option[1];
+
+
+      const en =
+        option[0];
+
+
       const selected =
-        answers[
-          question.id
-        ] === value
+        answers[question.id] === value
+          ? "selected"
+          : "";
 
-        ? "selected"
 
-        : "";
+      let optionText;
+
+
+      if (language === "ar") {
+
+        optionText = ar;
+
+      }
+
+      else if (language === "en") {
+
+        optionText = en;
+
+      }
+
+      else {
+
+        optionText =
+          `${ar} | ${en}`;
+
+      }
 
 
       html += `
@@ -630,11 +814,7 @@ function createSelect(
           value="${value}"
           ${selected}
         >
-
-          ${option[1]}
-          |
-          ${option[0]}
-
+          ${optionText}
         </option>
 
       `;
@@ -643,15 +823,24 @@ function createSelect(
   );
 
 
+  const otherPlaceholder =
+    language === "ar"
+
+      ? "يرجى التوضيح"
+
+      : language === "en"
+
+        ? "Please specify"
+
+        : "يرجى التوضيح / Please specify";
+
 
   html += `
 
     </select>
 
 
-
     <input
-
       id="${question.id}_other"
 
       class="
@@ -659,15 +848,11 @@ function createSelect(
         other-input
       "
 
-      placeholder="
-        Please specify /
-        يرجى التوضيح
-      "
+      placeholder="${otherPlaceholder}"
 
       value="${
         answers[
-          question.id +
-          "_other"
+          question.id + "_other"
         ] || ""
       }"
 
@@ -677,20 +862,17 @@ function createSelect(
           this.value
         )
       "
-
     >
 
   `;
-
 
 
   setTimeout(
     () => {
 
       if (
-        answers[
-          question.id
-        ] === "Other"
+        answers[question.id] ===
+        "Other"
       ) {
 
         checkOther(
@@ -701,7 +883,6 @@ function createSelect(
       }
 
     },
-
     0
   );
 
@@ -711,30 +892,22 @@ function createSelect(
 }
 
 
-
 /* =========================================================
    OTHER FIELD
 ========================================================= */
-
 
 function checkOther(
   questionId,
   value
 ) {
 
-
   const field =
     document.getElementById(
-      questionId +
-      "_other"
+      questionId + "_other"
     );
 
 
-  if (!field) {
-
-    return;
-
-  }
+  if (!field) return;
 
 
   field.style.display =
@@ -745,27 +918,21 @@ function checkOther(
 }
 
 
-
 /* =========================================================
    SAVE ANSWERS
 ========================================================= */
-
 
 function saveAnswer(
   id,
   value
 ) {
 
-
-  answers[id] =
-    value;
+  answers[id] = value;
 
 
   localStorage.setItem(
     "wa7edAnswers",
-    JSON.stringify(
-      answers
-    )
+    JSON.stringify(answers)
   );
 
 
@@ -774,92 +941,120 @@ function saveAnswer(
 }
 
 
-
 /* =========================================================
    SAVE NOTES
 ========================================================= */
 
-
 function saveSectionNotes() {
 
-
   const section =
-    assessmentSections[
-      currentSection
-    ];
+    assessmentSections[currentSection];
 
 
-  notes[
-    section.id
-  ] =
+  notes[section.id] =
     sectionNotes.value;
 
 
   localStorage.setItem(
     "wa7edNotes",
-    JSON.stringify(
-      notes
-    )
+    JSON.stringify(notes)
   );
 
 }
 
 
+/* =========================================================
+   SCROLL TO FIRST QUESTION
+========================================================= */
+
 function scrollToFirstQuestion() {
 
-  setTimeout(() => {
+  setTimeout(
+    () => {
 
-    const firstQuestion =
-      document.querySelector(
-        "#questionsContainer .question"
-      );
+      const firstQuestion =
+        document.querySelector(
+          "#questionsContainer .question"
+        );
 
-    if (!firstQuestion) return;
 
-    const y =
-      firstQuestion.getBoundingClientRect().top +
-      window.pageYOffset -
-      120;
+      if (!firstQuestion) return;
 
-    window.scrollTo({
-      top: y,
-      behavior: "smooth"
-    });
 
-  }, 50);
+      const y =
+        firstQuestion
+          .getBoundingClientRect()
+          .top
+        +
+        window.pageYOffset
+        -
+        120;
+
+
+      window.scrollTo({
+
+        top: y,
+
+        behavior: "smooth"
+
+      });
+
+    },
+    50
+  );
 
 }
+
+
+/* =========================================================
+   SCROLL TO RESULTS
+========================================================= */
+
+function scrollToResults() {
+
+  setTimeout(
+    () => {
+
+      const resultPage =
+        document.getElementById(
+          "resultsPage"
+        );
+
+
+      if (!resultPage) return;
+
+
+      const y =
+        resultPage
+          .getBoundingClientRect()
+          .top
+        +
+        window.pageYOffset
+        -
+        100;
+
+
+      window.scrollTo({
+
+        top: y,
+
+        behavior: "smooth"
+
+      });
+
+    },
+    50
+  );
+
+}
+
+
 /* =========================================================
    NAVIGATION
 ========================================================= */
-function scrollToFirstQuestion() {
-
-  setTimeout(() => {
-
-    const firstQuestion =
-      document.querySelector(
-        "#questionsContainer .question"
-      );
-
-    if (!firstQuestion) return;
-
-    const y =
-      firstQuestion.getBoundingClientRect().top +
-      window.pageYOffset -
-      120;
-
-    window.scrollTo({
-      top: y,
-      behavior: "smooth"
-    });
-
-  }, 50);
-
-}
 
 previousBtn.onclick =
   () => {
-
 
     saveSectionNotes();
 
@@ -867,7 +1062,6 @@ previousBtn.onclick =
     if (
       currentSection > 0
     ) {
-
 
       currentSection--;
 
@@ -880,18 +1074,15 @@ previousBtn.onclick =
 
       renderSection();
 
-
-    scrollToFirstQuestion();
+      scrollToFirstQuestion();
 
     }
 
   };
 
 
-
 nextBtn.onclick =
   () => {
-
 
     saveSectionNotes();
 
@@ -900,7 +1091,6 @@ nextBtn.onclick =
       currentSection <
       assessmentSections.length - 1
     ) {
-
 
       currentSection++;
 
@@ -913,11 +1103,9 @@ nextBtn.onclick =
 
       renderSection();
 
-
-    scrollToFirstQuestion();
+      scrollToFirstQuestion();
 
     }
-
 
     else {
 
@@ -928,10 +1116,8 @@ nextBtn.onclick =
   };
 
 
-
 saveBtn.onclick =
   () => {
-
 
     saveSectionNotes();
 
@@ -942,21 +1128,38 @@ saveBtn.onclick =
     );
 
 
-    alert(
-      "Progress saved successfully.\nتم حفظ التقدم بنجاح."
-    );
+    if (language === "ar") {
+
+      alert(
+        "تم حفظ التقدم بنجاح."
+      );
+
+    }
+
+    else if (language === "en") {
+
+      alert(
+        "Progress saved successfully."
+      );
+
+    }
+
+    else {
+
+      alert(
+        "Progress saved successfully.\nتم حفظ التقدم بنجاح."
+      );
+
+    }
 
   };
-
 
 
 /* =========================================================
    PROGRESS
 ========================================================= */
 
-
 function updateProgress() {
-
 
   const allQuestions =
     assessmentSections.flatMap(
@@ -971,15 +1174,13 @@ function updateProgress() {
 
         return (
 
-          answers[
-            question.id
-          ] !== undefined
+          answers[question.id]
+          !== undefined
 
           &&
 
-          answers[
-            question.id
-          ] !== ""
+          answers[question.id]
+          !== ""
 
         );
 
@@ -987,20 +1188,18 @@ function updateProgress() {
     ).length;
 
 
-
   const percent =
     allQuestions.length
 
-    ? Math.round(
-        (
-          answered /
-          allQuestions.length
+      ? Math.round(
+          (
+            answered /
+            allQuestions.length
+          )
+          * 100
         )
-        * 100
-      )
 
-    : 0;
-
+      : 0;
 
 
   document.getElementById(
@@ -1009,12 +1208,10 @@ function updateProgress() {
     `${percent}%`;
 
 
-
   document.getElementById(
     "progressText"
   ).textContent =
     `${percent}%`;
-
 
 
   const section =
@@ -1023,36 +1220,24 @@ function updateProgress() {
     ];
 
 
-
   document.getElementById(
     "sectionName"
   ).textContent =
-
-    language === "ar"
-
-      ? section.titleAr
-
-      : language === "en"
-
-        ? section.titleEn
-
-        :
-          `${section.titleAr} | ${section.titleEn}`;
+    textByLanguage(
+      section.titleAr,
+      section.titleEn
+    );
 
 }
-
 
 
 /* =========================================================
    CALCULATE RESULTS
 ========================================================= */
 
-
 function calculateResults() {
 
-
-  const results =
-    [];
+  const results = [];
 
 
   assessmentSections
@@ -1065,39 +1250,26 @@ function calculateResults() {
     .forEach(
       section => {
 
+        let total = 0;
 
-        let total =
-          0;
-
-
-        let count =
-          0;
-
+        let count = 0;
 
 
         section.questions.forEach(
           question => {
 
-
             const value =
-              answers[
-                question.id
-              ];
-
+              answers[question.id];
 
 
             if (
               value
-
               &&
               value !== "NA"
             ) {
 
-
               const numeric =
-                Number(
-                  value
-                );
+                Number(value);
 
 
               if (
@@ -1106,9 +1278,7 @@ function calculateResults() {
                 )
               ) {
 
-                total +=
-                  numeric;
-
+                total += numeric;
 
                 count++;
 
@@ -1120,15 +1290,12 @@ function calculateResults() {
         );
 
 
-
         if (
           count > 0
         ) {
 
-
           const average =
-            total /
-            count;
+            total / count;
 
 
           results.push({
@@ -1164,92 +1331,119 @@ function calculateResults() {
 }
 
 
-
 /* =========================================================
    MATURITY
 ========================================================= */
 
+function getMaturity(score) {
 
-function getMaturity(
-  score
-) {
+  let ar;
+  let en;
 
 
   if (
     score <= 1.8
   ) {
 
-    return (
-      "Initial / مبدئي"
-    );
+    ar = "مبدئي";
+
+    en = "Initial";
 
   }
 
-
-  if (
+  else if (
     score <= 2.6
   ) {
 
-    return (
-      "Developing / قيد التطوير"
-    );
+    ar = "قيد التطوير";
+
+    en = "Developing";
 
   }
 
-
-  if (
+  else if (
     score <= 3.4
   ) {
 
-    return (
-      "Defined / مُعرّف"
-    );
+    ar = "مُعرّف";
+
+    en = "Defined";
 
   }
 
-
-  if (
+  else if (
     score <= 4.2
   ) {
 
-    return (
-      "Managed / مُدار"
-    );
+    ar = "مُدار";
+
+    en = "Managed";
+
+  }
+
+  else {
+
+    ar = "مُحسن";
+
+    en = "Optimized";
 
   }
 
 
-  return (
-    "Optimized / مُحسن"
-  );
+  return {
+    ar,
+    en,
+    display:
+      textByLanguage(
+        ar,
+        en
+      )
+  };
 
 }
-
 
 
 /* =========================================================
    SHOW RESULTS
 ========================================================= */
 
-
 function showResults() {
-
 
   const results =
     calculateResults();
-
 
 
   if (
     results.length === 0
   ) {
 
+    if (
+      language === "ar"
+    ) {
 
-    alert(
+      alert(
+        "يرجى الإجابة على أسئلة التقييم أولاً."
+      );
 
-      "Please answer some scored questions first.\nيرجى الإجابة على أسئلة التقييم أولاً."
+    }
 
-    );
+    else if (
+      language === "en"
+    ) {
+
+      alert(
+        "Please answer some scored questions first."
+      );
+
+    }
+
+    else {
+
+      alert(
+        "Please answer some scored questions first.\nيرجى الإجابة على أسئلة التقييم أولاً."
+      );
+
+    }
 
 
     return;
@@ -1257,10 +1451,8 @@ function showResults() {
   }
 
 
-
   const overall =
     results.reduce(
-
       (
         sum,
         result
@@ -1270,9 +1462,9 @@ function showResults() {
         result.average,
 
       0
-
-    ) / results.length;
-
+    )
+    /
+    results.length;
 
 
   const percentage =
@@ -1285,7 +1477,6 @@ function showResults() {
     );
 
 
-
   document.getElementById(
     "assessmentLayout"
   ).classList.add(
@@ -1293,21 +1484,32 @@ function showResults() {
   );
 
 
-
-  document.querySelector(
-    ".hero"
-  ).classList.add(
-    "hidden"
-  );
+  const hero =
+    document.querySelector(".hero");
 
 
+  if (hero) {
 
-  document.querySelector(
-    ".brand-message"
-  ).classList.add(
-    "hidden"
-  );
+    hero.classList.add(
+      "hidden"
+    );
 
+  }
+
+
+  const brandMessage =
+    document.querySelector(
+      ".brand-message"
+    );
+
+
+  if (brandMessage) {
+
+    brandMessage.classList.add(
+      "hidden"
+    );
+
+  }
 
 
   const resultPage =
@@ -1321,26 +1523,20 @@ function showResults() {
   );
 
 
-
   document.getElementById(
     "overallScore"
   ).textContent =
     `${percentage}%`;
 
 
-
   const maturity =
-    getMaturity(
-      overall
-    );
-
+    getMaturity(overall);
 
 
   document.getElementById(
     "maturityLevel"
   ).textContent =
-    maturity;
-
+    maturity.display;
 
 
   renderDomainScores(
@@ -1348,43 +1544,40 @@ function showResults() {
   );
 
 
-
   const strengths =
     [...results]
 
-    .sort(
-      (
-        a,
-        b
-      ) =>
-        b.percentage -
-        a.percentage
-    )
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b.percentage -
+          a.percentage
+      )
 
-    .slice(
-      0,
-      3
-    );
-
+      .slice(
+        0,
+        3
+      );
 
 
   const improvements =
     [...results]
 
-    .sort(
-      (
-        a,
-        b
-      ) =>
-        a.percentage -
-        b.percentage
-    )
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          a.percentage -
+          b.percentage
+      )
 
-    .slice(
-      0,
-      3
-    );
-
+      .slice(
+        0,
+        3
+      );
 
 
   renderStrengths(
@@ -1397,7 +1590,6 @@ function showResults() {
   );
 
 
-
   updateEmailLink(
     percentage,
     maturity,
@@ -1405,22 +1597,45 @@ function showResults() {
   );
 
 
+  updateResultsStaticText();
 
- scrollToFirstQuestion();
+
+  scrollToResults();
 
 }
 
+
+/* =========================================================
+   RESULTS STATIC TEXT
+========================================================= */
+
+function updateResultsStaticText() {
+
+  const resultPage =
+    document.getElementById(
+      "resultsPage"
+    );
+
+
+  if (!resultPage) return;
+
+
+  /*
+    Existing .ar and .en elements
+    will automatically respond to
+    body.ar-only / body.en-only.
+  */
+
+}
 
 
 /* =========================================================
    DOMAIN RESULTS
 ========================================================= */
 
-
 function renderDomainScores(
   results
 ) {
-
 
   const container =
     document.getElementById(
@@ -1428,20 +1643,62 @@ function renderDomainScores(
     );
 
 
-  container.innerHTML =
-    "";
-
+  container.innerHTML = "";
 
 
   results.forEach(
     result => {
-
 
       const percent =
         Math.round(
           result.percentage
         );
 
+
+      let titleHTML;
+
+
+      if (
+        language === "ar"
+      ) {
+
+        titleHTML = `
+          <strong class="ar">
+            ${result.titleAr}
+          </strong>
+        `;
+
+      }
+
+      else if (
+        language === "en"
+      ) {
+
+        titleHTML = `
+          <strong class="en">
+            ${result.titleEn}
+          </strong>
+        `;
+
+      }
+
+      else {
+
+        titleHTML = `
+
+          <strong class="ar">
+            ${result.titleAr}
+          </strong>
+
+          <br>
+
+          <small class="en">
+            ${result.titleEn}
+          </small>
+
+        `;
+
+      }
 
 
       container.innerHTML += `
@@ -1451,19 +1708,8 @@ function renderDomainScores(
           <div class="domain-heading">
 
             <div>
-
-              <strong>
-                ${result.titleAr}
-              </strong>
-
-              <br>
-
-              <small>
-                ${result.titleEn}
-              </small>
-
+              ${titleHTML}
             </div>
-
 
             <strong>
               ${percent}%
@@ -1475,7 +1721,6 @@ function renderDomainScores(
           <div class="domain-bar">
 
             <div
-
               class="domain-fill"
 
               style="
@@ -1483,7 +1728,6 @@ function renderDomainScores(
                 ${percent}%
               "
             >
-
             </div>
 
           </div>
@@ -1498,16 +1742,13 @@ function renderDomainScores(
 }
 
 
-
 /* =========================================================
    STRENGTHS
 ========================================================= */
 
-
 function renderStrengths(
   results
 ) {
-
 
   const container =
     document.getElementById(
@@ -1517,43 +1758,47 @@ function renderStrengths(
 
   container.innerHTML =
     results.map(
-      result => `
+      result => {
 
-        <p>
+        const title =
+          textByLanguage(
+            result.titleAr,
+            result.titleEn
+          );
 
-          ✓
 
-          <strong>
-            ${result.titleAr}
-          </strong>
+        return `
 
-          <br>
+          <p>
 
-          ${result.titleEn}
+            ✓
 
-          —
-          ${Math.round(
-            result.percentage
-          )}%
+            <strong>
+              ${title}
+            </strong>
 
-        </p>
+            —
+            ${Math.round(
+              result.percentage
+            )}%
 
-      `
+          </p>
+
+        `;
+
+      }
     ).join("");
 
 }
-
 
 
 /* =========================================================
    IMPROVEMENTS
 ========================================================= */
 
-
 function renderImprovements(
   results
 ) {
-
 
   const container =
     document.getElementById(
@@ -1563,38 +1808,43 @@ function renderImprovements(
 
   container.innerHTML =
     results.map(
-      result => `
+      result => {
 
-        <p>
+        const title =
+          textByLanguage(
+            result.titleAr,
+            result.titleEn
+          );
 
-          →
 
-          <strong>
-            ${result.titleAr}
-          </strong>
+        return `
 
-          <br>
+          <p>
 
-          ${result.titleEn}
+            →
 
-          —
-          ${Math.round(
-            result.percentage
-          )}%
+            <strong>
+              ${title}
+            </strong>
 
-        </p>
+            —
+            ${Math.round(
+              result.percentage
+            )}%
 
-      `
+          </p>
+
+        `;
+
+      }
     ).join("");
 
 }
 
 
-
 /* =========================================================
    EMAIL RESULTS REVIEW
 ========================================================= */
-
 
 function updateEmailLink(
   percentage,
@@ -1602,42 +1852,89 @@ function updateEmailLink(
   improvements
 ) {
 
-
   const button =
     document.getElementById(
       "reviewResultsButton"
     );
 
 
-  const priorities =
+  if (!button) return;
+
+
+  const prioritiesEnglish =
     improvements.map(
       item =>
         `${item.titleEn} (${Math.round(item.percentage)}%)`
-    ).join(
-      ", "
-    );
+    ).join(", ");
 
 
+  const prioritiesArabic =
+    improvements.map(
+      item =>
+        `${item.titleAr} (${Math.round(item.percentage)}%)`
+    ).join("، ");
 
-  const subject =
-    encodeURIComponent(
-      "Wa7ed Assessment Results Review"
-    );
+
+  let subject;
+
+  let body;
 
 
+  if (
+    language === "ar"
+  ) {
 
-  const body =
-    encodeURIComponent(
+    subject =
+      encodeURIComponent(
+        "طلب مراجعة نتائج تقييم و1حد"
+      );
+
+
+    body =
+      encodeURIComponent(
+
+`السلام عليكم،
+
+أرغب في طلب مراجعة نتائج التقييم.
+
+النتيجة الإجمالية: ${percentage}%
+مستوى النضج: ${maturity.ar}
+
+مجالات الأولوية:
+${prioritiesArabic}
+
+اسم الشركة:
+اسم الشخص:
+رقم الجوال:
+
+شكراً.`
+
+      );
+
+  }
+
+  else if (
+    language === "en"
+  ) {
+
+    subject =
+      encodeURIComponent(
+        "Wa7ed Assessment Results Review"
+      );
+
+
+    body =
+      encodeURIComponent(
 
 `Hello Wa7ed Team,
 
 I would like to request a review of my assessment results.
 
 Overall Score: ${percentage}%
-Maturity Level: ${maturity}
+Maturity Level: ${maturity.en}
 
 Priority Areas:
-${priorities}
+${prioritiesEnglish}
 
 Company Name:
 Contact Name:
@@ -1645,8 +1942,49 @@ Phone:
 
 Thank you.`
 
-    );
+      );
 
+  }
+
+  else {
+
+    subject =
+      encodeURIComponent(
+        "Wa7ed Assessment Results Review | مراجعة نتائج تقييم و1حد"
+      );
+
+
+    body =
+      encodeURIComponent(
+
+`Hello Wa7ed Team,
+السلام عليكم،
+
+I would like to request a review of my assessment results.
+أرغب في طلب مراجعة نتائج التقييم.
+
+Overall Score / النتيجة الإجمالية:
+${percentage}%
+
+Maturity Level / مستوى النضج:
+${maturity.en} | ${maturity.ar}
+
+Priority Areas / مجالات الأولوية:
+${prioritiesEnglish}
+${prioritiesArabic}
+
+Company Name / اسم الشركة:
+
+Contact Name / اسم الشخص:
+
+Phone / رقم الجوال:
+
+Thank you.
+شكراً.`
+
+      );
+
+  }
 
 
   button.href =
@@ -1655,14 +1993,14 @@ Thank you.`
 }
 
 
-
 /* =========================================================
-   LANGUAGE
+   LANGUAGE SELECTOR
 ========================================================= */
-
 
 languageSelect.onchange =
   function() {
+
+    saveSectionNotes();
 
 
     language =
@@ -1675,87 +2013,18 @@ languageSelect.onchange =
     );
 
 
-    applyLanguage(const heroBrandImage =
-  document.getElementById("heroBrandImage");
-
-if (heroBrandImage) {
-
-  if (language === "ar") {
-
-    heroBrandImage.src =
-      "Wa7ed-ar.png";
-
-    heroBrandImage.alt =
-      "و1حد للتقييمات";
-
-  }
-
-  else if (language === "en") {
-
-    heroBrandImage.src =
-      "Wa7ed-en.png";
-
-    heroBrandImage.alt =
-      "Wa7ed Assessment";
-
-  }
-
-  else {
-
-    heroBrandImage.src =
-      "Wa7ed-bilingual.png";
-
-    heroBrandImage.alt =
-      "Wa7ed Assessment | و1حد للتقييمات";
-
-  }
-
-});
-
+    applyLanguage();
 
     renderSection();
 
   };
 
 
+/* =========================================================
+   APPLY LANGUAGE
+========================================================= */
 
-function applyLanguage(const heroBrandImage =
-  document.getElementById("heroBrandImage");
-
-if (heroBrandImage) {
-
-  if (language === "ar") {
-
-    heroBrandImage.src =
-      "Wa7ed-ar.png";
-
-    heroBrandImage.alt =
-      "و1حد للتقييمات";
-
-  }
-
-  else if (language === "en") {
-
-    heroBrandImage.src =
-      "Wa7ed-en.png";
-
-    heroBrandImage.alt =
-      "Wa7ed Assessment";
-
-  }
-
-  else {
-
-    heroBrandImage.src =
-      "Wa7ed-bilingual.png";
-
-    heroBrandImage.alt =
-      "Wa7ed Assessment | و1حد للتقييمات";
-
-  }
-
-}) {
-
+function applyLanguage() {
 
   document.body.classList.remove(
     "ar-only",
@@ -1763,11 +2032,44 @@ if (heroBrandImage) {
   );
 
 
+  /*
+    Keep same image for all languages.
+  */
+
+  const heroBrandImage =
+    document.getElementById(
+      "heroBrandImage"
+    );
+
+
+  if (heroBrandImage) {
+
+    heroBrandImage.src =
+      "Wa7ed-ar.png";
+
+
+    heroBrandImage.alt =
+      language === "ar"
+
+        ? "و1حد للتقييمات"
+
+        : language === "en"
+
+          ? "Wa7ed Assessment"
+
+          :
+          "Wa7ed Assessment | و1حد للتقييمات";
+
+  }
+
+
+  /*
+    Arabic
+  */
 
   if (
     language === "ar"
   ) {
-
 
     document.body.classList.add(
       "ar-only"
@@ -1781,14 +2083,20 @@ if (heroBrandImage) {
     document.documentElement.lang =
       "ar";
 
+
+    document.title =
+      "🛡️ تقييم و1حد | التقنية والذكاء الاصطناعي والأمن السيبراني";
+
   }
 
 
+  /*
+    English
+  */
 
   else if (
     language === "en"
   ) {
-
 
     document.body.classList.add(
       "en-only"
@@ -1802,12 +2110,18 @@ if (heroBrandImage) {
     document.documentElement.lang =
       "en";
 
+
+    document.title =
+      "🛡️ Wa7ed Assessment | Technology, AI & Cybersecurity";
+
   }
 
 
+  /*
+    Arabic + English
+  */
 
   else {
-
 
     document.documentElement.dir =
       "ltr";
@@ -1816,37 +2130,57 @@ if (heroBrandImage) {
     document.documentElement.lang =
       "en";
 
+
+    document.title =
+      "🛡️ Wa7ed Assessment | تقييم و1حد | Technology, AI & Cybersecurity";
+
   }
 
 }
-
 
 
 /* =========================================================
    RESTART
 ========================================================= */
 
-
 function restartAssessment() {
 
-
-  const confirmRestart =
-    confirm(
-
-      "Delete all answers and restart?\nحذف جميع الإجابات وإعادة التقييم؟"
-
-    );
-
+  let message;
 
 
   if (
-    !confirmRestart
+    language === "ar"
   ) {
 
-    return;
+    message =
+      "هل تريد حذف جميع الإجابات وإعادة التقييم؟";
 
   }
 
+  else if (
+    language === "en"
+  ) {
+
+    message =
+      "Delete all answers and restart the assessment?";
+
+  }
+
+  else {
+
+    message =
+      "Delete all answers and restart?\nحذف جميع الإجابات وإعادة التقييم؟";
+
+  }
+
+
+  const confirmRestart =
+    confirm(message);
+
+
+  if (!confirmRestart) {
+    return;
+  }
 
 
   localStorage.removeItem(
@@ -1864,18 +2198,11 @@ function restartAssessment() {
   );
 
 
+  answers = {};
 
-  answers =
-    {};
+  notes = {};
 
-
-  notes =
-    {};
-
-
-  currentSection =
-    0;
-
+  currentSection = 0;
 
 
   window.location.reload();
