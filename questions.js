@@ -75,6 +75,7 @@ const assessmentSections = [
   ]
 },
 
+
 {
   id: "strategy",
 
@@ -127,6 +128,7 @@ const assessmentSections = [
   ]
 },
 
+
 {
   id: "applications",
 
@@ -162,6 +164,7 @@ const assessmentSections = [
   ]
 },
 
+
 {
   id: "cloud",
 
@@ -196,6 +199,7 @@ const assessmentSections = [
 
   ]
 },
+
 
 {
   id: "cyber",
@@ -243,10 +247,11 @@ const assessmentSections = [
   ]
 },
 
+
 {
   id: "data",
 
-  titleEn: "Data, Database, Backup & Business Continuity",
+  titleEn: "Data, Database, Backup & Continuity",
   titleAr:
     "البيانات وقواعد البيانات والنسخ الاحتياطي واستمرارية الأعمال",
 
@@ -289,6 +294,7 @@ const assessmentSections = [
 
   ]
 },
+
 
 {
   id: "ai",
@@ -336,6 +342,7 @@ const assessmentSections = [
   ]
 },
 
+
 {
   id: "vendors",
 
@@ -371,6 +378,7 @@ const assessmentSections = [
   ]
 },
 
+
 {
   id: "people",
 
@@ -405,6 +413,7 @@ const assessmentSections = [
 
   ]
 },
+
 
 {
   id: "regulatory",
