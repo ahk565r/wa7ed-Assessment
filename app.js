@@ -109,7 +109,42 @@ function init() {
   }
 
 
-  applyLanguage();
+  applyLanguage(const heroBrandImage =
+  document.getElementById("heroBrandImage");
+
+if (heroBrandImage) {
+
+  if (language === "ar") {
+
+    heroBrandImage.src =
+      "Wa7ed-ar.png";
+
+    heroBrandImage.alt =
+      "و1حد للتقييمات";
+
+  }
+
+  else if (language === "en") {
+
+    heroBrandImage.src =
+      "Wa7ed-en.png";
+
+    heroBrandImage.alt =
+      "Wa7ed Assessment";
+
+  }
+
+  else {
+
+    heroBrandImage.src =
+      "Wa7ed-bilingual.png";
+
+    heroBrandImage.alt =
+      "Wa7ed Assessment | و1حد للتقييمات";
+
+  }
+
+});
 
   buildMenu();
 
@@ -1640,7 +1675,42 @@ languageSelect.onchange =
     );
 
 
-    applyLanguage();
+    applyLanguage(const heroBrandImage =
+  document.getElementById("heroBrandImage");
+
+if (heroBrandImage) {
+
+  if (language === "ar") {
+
+    heroBrandImage.src =
+      "Wa7ed-ar.png";
+
+    heroBrandImage.alt =
+      "و1حد للتقييمات";
+
+  }
+
+  else if (language === "en") {
+
+    heroBrandImage.src =
+      "Wa7ed-en.png";
+
+    heroBrandImage.alt =
+      "Wa7ed Assessment";
+
+  }
+
+  else {
+
+    heroBrandImage.src =
+      "Wa7ed-bilingual.png";
+
+    heroBrandImage.alt =
+      "Wa7ed Assessment | و1حد للتقييمات";
+
+  }
+
+});
 
 
     renderSection();
@@ -1649,7 +1719,42 @@ languageSelect.onchange =
 
 
 
-function applyLanguage() {
+function applyLanguage(const heroBrandImage =
+  document.getElementById("heroBrandImage");
+
+if (heroBrandImage) {
+
+  if (language === "ar") {
+
+    heroBrandImage.src =
+      "Wa7ed-ar.png";
+
+    heroBrandImage.alt =
+      "و1حد للتقييمات";
+
+  }
+
+  else if (language === "en") {
+
+    heroBrandImage.src =
+      "Wa7ed-en.png";
+
+    heroBrandImage.alt =
+      "Wa7ed Assessment";
+
+  }
+
+  else {
+
+    heroBrandImage.src =
+      "Wa7ed-bilingual.png";
+
+    heroBrandImage.alt =
+      "Wa7ed Assessment | و1حد للتقييمات";
+
+  }
+
+}) {
 
 
   document.body.classList.remove(
