@@ -2,147 +2,247 @@
 
 و1حد للتقييمات
 
-A bilingual (Arabic / English) Technology, AI, Cybersecurity and Regulatory Readiness Assessment platform for SMEs.
+**Clearer Decisions. Greater Impact.**  
+**قرار أوضح. أثر أكبر.**
 
-Front-end MVP: plain HTML, CSS and vanilla JavaScript. No framework, no backend, no database, no secrets.
+Wa7ed Assessment is a bilingual Technology, AI, Cybersecurity and Regulatory Readiness Assessment platform for SMEs.
+
+The project helps organizations understand their current technology landscape, identify risks and priorities, and make clearer technology decisions.
+
+---
+
+## Brand Positioning
+
+**Your Independent Technology Partner**  
+**شريكك التقني المستقل**
+
+**We Represent Your Technology Interests**  
+**نمثّل مصلحتك في القرار التقني**
+
+Core brand values:
+
+- Clarity | وضوح
+- Value | قيمة
+- Trust | ثقة
+- Readiness | جاهزية
+- Independence | استقلالية
+
+---
 
 ## Purpose
 
-The project helps organizations evaluate:
+The platform helps organizations evaluate:
 
-- Technology maturity and governance
+- Technology maturity
 - Business systems and processes
 - Cloud and infrastructure
 - Cybersecurity and risk
-- Data, backup and business continuity
+- Data, database, backup and business continuity
 - AI and automation readiness
 - Vendor and financial management
 - People, skills and change
 - Regulatory readiness
 
-## Files
+The assessment is intended to be the first step toward:
 
-| File | Purpose |
-|---|---|
-| `index.html` | Main interface |
-| `style.css` | Visual design and responsive layout |
-| `questions.js` | Assessment sections and questions (edit here to change content) |
-| `app.js` | Navigation, storage, scoring and results |
-| `README.md` | Project documentation |
-| `.gitignore` | Files excluded from Git |
+**Assessment → Recommendations → Roadmap → Vendor Selection → Project Management → Ongoing Advisory**
 
-`questions.js` must load before `app.js` (already set in `index.html`).
+---
 
-## Run locally
+## Project Files
 
-Open `index.html` in a browser.
+- `index.html` — main user interface and brand messaging
+- `style.css` — visual identity and responsive design
+- `questions.js` — assessment questions and sections
+- `app.js` — navigation, local storage, scoring and results
+- `README.md` — project documentation
+- `.gitignore` — files excluded from Git
 
-Or serve the folder (recommended, closer to GitHub Pages):
+---
 
-```bash
-python3 -m http.server 8000
-# then open http://localhost:8000
-```
+## Languages
 
-## Deploy to GitHub Pages
+The platform supports:
 
-1. Create a repository named `wa7ed-assessment`.
-2. Upload all six files to the repository root.
-3. Settings → Pages → Build and deployment → Source: **Deploy from a branch**.
-4. Branch: **main**, folder: **/(root)** → Save.
-5. Wait 1–2 minutes. The site will be at:
+- Arabic
+- English
+- Arabic + English
 
-```
-https://USERNAME.github.io/wa7ed-assessment/
-```
+Arabic uses RTL layout.
 
-All paths are relative, so no configuration changes are needed.
+English uses LTR layout.
+
+---
+
+## Assessment Sections
+
+1. Organization Profile  
+   معلومات المنشأة
+
+2. Strategy & Governance  
+   الاستراتيجية والحوكمة
+
+3. Business Applications & Processes  
+   الأنظمة والتطبيقات والعمليات
+
+4. Cloud & Infrastructure  
+   السحابة والبنية التحتية
+
+5. Cybersecurity & Risk  
+   الأمن السيبراني والمخاطر
+
+6. Data, Database, Backup & Business Continuity  
+   البيانات وقواعد البيانات والنسخ الاحتياطي واستمرارية الأعمال
+
+7. AI & Automation Readiness  
+   جاهزية الذكاء الاصطناعي والأتمتة
+
+8. Vendor & Financial Management  
+   إدارة الموردين والجانب المالي
+
+9. People, Skills & Change  
+   الأشخاص والمهارات وإدارة التغيير
+
+10. Regulatory Readiness  
+    الجاهزية التنظيمية
+
+---
 
 ## Scoring
 
-| Value | English | العربية |
-|---|---|---|
-| 1 | Not in place | غير موجود |
-| 2 | Partially in place | موجود بشكل محدود |
-| 3 | In place but inconsistent | موجود ولكن غير منتظم |
-| 4 | Well established | مطبق بشكل جيد |
-| 5 | Fully established and measured | مطبق بالكامل ويتم قياسه |
-| N/A | Not applicable / Not sure | لا ينطبق / غير متأكد |
+1 = Not in place  
+غير موجود
 
-Rules:
+2 = Partially in place  
+موجود بشكل محدود
 
-- N/A and unanswered questions are excluded — they never reduce a score.
-- Domain % = domain average ÷ 5 × 100.
-- A domain with no numeric answers is left out of the results.
-- Overall score = average of the domain averages (each domain weighted equally).
-- Organization Profile is informational and is not scored.
+3 = In place but inconsistent  
+موجود ولكن غير منتظم
+
+4 = Well established  
+مطبق بشكل جيد
+
+5 = Fully established and measured  
+مطبق بالكامل ويتم قياسه
+
+N/A = Not applicable / Not sure  
+لا ينطبق / غير متأكد
+
+Important:
+
+- N/A is excluded from scoring.
+- Unanswered questions are excluded from scoring.
+- Each domain is calculated independently.
+
+---
 
 ## Maturity Levels
 
-| Average | Level | المستوى |
-|---|---|---|
-| 1.00–1.80 | Initial | مبدئي |
-| 1.81–2.60 | Developing | قيد التطوير |
-| 2.61–3.40 | Defined | مُعرّف |
-| 3.41–4.20 | Managed | مُدار |
-| 4.21–5.00 | Optimized | مُحسن |
+- 1.00–1.80 → Initial | مبدئي
+- 1.81–2.60 → Developing | قيد التطوير
+- 2.61–3.40 → Defined | مُعرّف
+- 3.41–4.20 → Managed | مُدار
+- 4.21–5.00 → Optimized | مُحسن
 
-Averages are rounded to two decimals before classification.
-
-## Design
-
-| Token | Value | Use |
-|---|---|---|
-| Navy | `#0A2540` | Text, primary buttons, selected answers |
-| Deep blue | `#12406B` | Hero and results gradients |
-| Teal | `#14A3A8` | Accent on dark surfaces, progress |
-| Deep teal | `#0B7C82` | Accent on light surfaces (AA contrast) |
-| Light gray | `#F2F5F8` | Page background |
-
-Typeface: IBM Plex Sans Arabic (Google Fonts, Arabic + Latin), falling back to Segoe UI / Tahoma.
-
-Signature element: the maturity ladder. The 1–5 answer buttons rise like steps, and the results page shows the overall level on the same ladder. Domain bars carry tick marks at the maturity band boundaries (36%, 52%, 68%, 84%).
+---
 
 ## Current Features
 
-- Arabic (RTL), English (LTR) and bilingual modes
-- Progress bar, completion %, per-section answered counters
-- Section sidebar (horizontal scroller on mobile)
-- Previous / Next / Save, auto-save to `localStorage`
-- Optional notes per section (saved as you type)
-- Results: overall score, maturity level, domain scores, top 3 strengths, top 3 improvement areas, next steps
-- Back to assessment and restart
-- Responsive layout for desktop, tablet and iPhone
+- Arabic and English support
+- RTL / LTR support
+- Responsive mobile layout
+- iPhone-friendly interface
+- Progress bar
+- Section navigation
+- Local progress saving
+- Optional notes
+- Domain scoring
+- Overall maturity score
+- Top strengths
+- Improvement priorities
+- Results page
+- Email contact and results review request
 
-## localStorage keys
+---
 
-| Key | Content |
-|---|---|
-| `wa7edAnswers` | Answers by question ID |
-| `wa7edNotes` | Notes by section ID |
-| `wa7edLanguage` | `both`, `ar` or `en` |
+## Contact
 
-Data stays in the respondent's browser only. Nothing is sent anywhere.
+For assessment review or technology advisory:
+
+**ahk565.work@gmail.com**
+
+---
+
+## Brand Colors
+
+- Navy: `#062747`
+- Deep Blue: `#0B365E`
+- Teal: `#18B6BB`
+- Light Teal: `#7DE1DF`
+- Background: `#F3F7FA`
+- White: `#FFFFFF`
+
+---
+
+## GitHub Pages
+
+Repository:
+
+`wa7ed-assessment`
+
+Publishing path:
+
+`Settings → Pages → Deploy from a branch → main → /(root)`
+
+Expected URL format:
+
+`https://USERNAME.github.io/wa7ed-assessment/`
+
+---
 
 ## Future Roadmap
 
-- Google Sheets integration
+Planned future integrations:
+
+- Google Sheets
 - Supabase
-- Client records
+- REST API
+- Client database
 - Regulatory mapping
 - Automated recommendations
-- PDF reports
+- PDF report generation
 - Email notifications
 - Consultant dashboard
+- Customer portal
+- Vendor comparison module
+
+---
 
 ## Security
 
-Do not store in this repository:
+Do not store the following inside the repository:
 
 - Passwords
-- Tokens
 - API keys
+- Tokens
 - Database credentials
 - Client confidential information
+- Private company data
 
-When a backend is added, keep keys server-side (or use Supabase row-level security with only the public anon key in the browser).
+Use environment variables and secure secret management for future integrations.
+
+---
+
+## Long-Term Vision
+
+Wa7ed aims to evolve from a simple assessment tool into an independent technology advisory platform that helps businesses make better decisions across:
+
+- Technology
+- Artificial Intelligence
+- Cybersecurity
+- Compliance
+- Vendors
+- Digital transformation
+
+**Clearer Decisions. Greater Impact.**  
+**قرار أوضح. أثر أكبر.**
