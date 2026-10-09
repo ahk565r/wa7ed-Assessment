@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="ltr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0A2540" />
+  <meta name="description" content="Technology, AI, Cybersecurity and Regulatory Readiness Assessment for SMEs — تقييم الجاهزية التقنية والذكاء الاصطناعي" />
+  <title>Wa7ed Assessment | و1حد للتقييمات</title>
 
-  <title>Wa7ed Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -12,57 +17,68 @@
 <body>
 
 <header class="topbar">
-  <div class="brand">
-    <div class="logo">و1حد</div>
-
-    <div>
-      <strong>Wa7ed Assessment</strong>
-      <small>Technology • AI • Cybersecurity • Readiness</small>
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">و1حد</div>
+      <div class="brand-text">
+        <strong>Wa7ed Assessment</strong>
+        <small>
+          <span class="ar">و1حد للتقييمات</span>
+          <span class="sep">|</span>
+          <span class="en">Technology Advisory</span>
+        </small>
+      </div>
     </div>
+
+    <label class="lang">
+      <span class="visually-hidden">Language / اللغة</span>
+      <select id="languageSelect">
+        <option value="both">AR + EN</option>
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+      </select>
+    </label>
   </div>
-
-  <select id="languageSelect">
-    <option value="both">AR + EN</option>
-    <option value="ar">العربية</option>
-    <option value="en">English</option>
-  </select>
 </header>
-
 
 <main class="page">
 
+  <!-- ============ Assessment ============ -->
+
   <section class="hero">
 
-    <div class="hero-tag">
-      Technology Advisory Assessment
+    <div class="hero-text">
+      <h1 id="mainTitle">
+        <span class="ar">تقييم الجاهزية التقنية والذكاء الاصطناعي</span>
+        <span class="en">Technology &amp; AI Readiness Assessment</span>
+      </h1>
+
+      <p id="mainSubtitle">
+        <span class="ar">الأمن السيبراني والبيانات والبنية التحتية والجاهزية التنظيمية، في عشرة محاور.</span>
+        <span class="en">Cybersecurity, data, infrastructure and regulatory readiness across ten areas.</span>
+      </p>
     </div>
-
-    <h1 id="mainTitle">
-      تقييم الجاهزية التقنية والذكاء الاصطناعي
-    </h1>
-
-    <p id="mainSubtitle">
-      Technology, AI, Cybersecurity & Regulatory Readiness Assessment
-    </p>
 
     <div class="progress-wrap">
       <div class="progress-info">
         <span id="sectionName">Organization Profile</span>
-        <span id="progressText">0%</span>
+        <span>
+          <strong id="progressText">0%</strong>
+          <span class="ar">مكتمل</span>
+          <span class="en">complete</span>
+        </span>
       </div>
 
-      <div class="progress-track">
-        <div id="progressBar"></div>
-      </div>
+      <!-- One segment per section; filled by app.js -->
+      <div id="progressSegments" class="progress-segments" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+      <div id="progressBar" hidden></div>
     </div>
 
   </section>
 
-
   <div class="assessment-layout">
 
-    <aside id="sectionMenu" class="section-menu"></aside>
-
+    <nav id="sectionMenu" class="section-menu" aria-label="Sections / المحاور"></nav>
 
     <section class="assessment-card">
 
@@ -72,9 +88,10 @@
 
       <div class="section-note">
 
-        <label>
+        <label for="sectionNotes">
           <span class="ar">ملاحظات إضافية</span>
-          <span class="en">Additional Notes</span>
+          <span class="sep">|</span>
+          <span class="en">Additional notes</span>
         </label>
 
         <textarea
@@ -84,20 +101,14 @@
 
       </div>
 
-
       <div class="navigation">
 
-        <button id="previousBtn" class="secondary">
-          ← Previous / السابق
-        </button>
+        <button id="previousBtn" class="secondary" type="button">Previous</button>
 
-        <button id="saveBtn" class="secondary">
-          Save / حفظ
-        </button>
-
-        <button id="nextBtn" class="primary">
-          Next / التالي →
-        </button>
+        <div class="nav-end">
+          <button id="saveBtn" class="ghost" type="button">Save</button>
+          <button id="nextBtn" class="primary" type="button">Next</button>
+        </div>
 
       </div>
 
@@ -105,88 +116,112 @@
 
   </div>
 
+  <!-- ============ Results ============ -->
 
   <section id="resultsPage" class="results hidden">
 
     <div class="result-header">
 
-      <span class="result-label">
-        Technology & AI Maturity
-      </span>
+      <div class="result-score">
+        <span class="result-label">
+          <span class="ar">درجة النضج التقني والذكاء الاصطناعي</span>
+          <span class="en">Overall Technology &amp; AI Maturity Score</span>
+        </span>
 
-      <h2>
-        نتيجة التقييم
-        <br>
-        Assessment Result
-      </h2>
+        <div id="overallScore" class="big-score">0%</div>
 
-      <div id="overallScore" class="big-score">0%</div>
+        <div class="maturity-label">
+          <span class="ar">مستوى النضج</span>
+          <span class="sep">|</span>
+          <span class="en">Maturity level</span>
+        </div>
 
-      <h3 id="maturityLevel"></h3>
+        <h2 id="maturityLevel"></h2>
+      </div>
+
+      <!-- Maturity ladder; current level highlighted by app.js -->
+      <ol id="maturityLadder" class="ladder" aria-label="Maturity levels / مستويات النضج"></ol>
 
     </div>
 
-
     <div class="results-grid">
 
-      <div class="result-card">
-        <h3>Domain Scores | نتائج المحاور</h3>
+      <div class="result-card domains-card">
+        <h3>
+          <span class="ar">نتائج المحاور</span>
+          <span class="sep">|</span>
+          <span class="en">Domain scores</span>
+        </h3>
         <div id="domainScores"></div>
       </div>
 
-
       <div class="result-card">
-        <h3>Top Strengths | أبرز نقاط القوة</h3>
+        <h3>
+          <span class="ar">أبرز 3 نقاط قوة</span>
+          <span class="sep">|</span>
+          <span class="en">Top 3 strengths</span>
+        </h3>
         <div id="strengths"></div>
       </div>
 
-
       <div class="result-card">
-        <h3>Priority Areas | الأولويات</h3>
+        <h3>
+          <span class="ar">أهم 3 مجالات للتحسين</span>
+          <span class="sep">|</span>
+          <span class="en">Top 3 improvement areas</span>
+        </h3>
         <div id="improvements"></div>
       </div>
 
+      <div class="result-card next-card">
 
-      <div class="result-card">
+        <h3>
+          <span class="ar">الخطوات المقترحة</span>
+          <span class="sep">|</span>
+          <span class="en">Suggested next steps</span>
+        </h3>
 
-        <h3>Next Steps | الخطوات القادمة</h3>
-
-        <p>
-          Review the results with a technology advisor and convert the
-          highest-priority gaps into a practical 90-day roadmap.
+        <p class="ar ar-text">
+          راجع النتائج مع مستشار تقني، وحوّل أعلى الأولويات إلى خارطة طريق عملية لمدة 90 يومًا.
         </p>
 
-        <p class="ar-text">
-          راجع النتائج مع مستشار تقني وحوّل أعلى الأولويات إلى
-          خارطة طريق عملية لمدة 90 يومًا.
+        <p class="en">
+          Review the results with a technology advisor and turn the highest-priority gaps into a practical 90-day roadmap.
         </p>
 
-        <button class="primary full">
-          Request Results Review
-          <br>
-          طلب مراجعة النتائج
+        <button id="reviewBtn" class="accent full" type="button">
+          <span class="ar">طلب مراجعة النتائج</span>
+          <br class="both-only">
+          <span class="en">Request results review</span>
         </button>
 
       </div>
 
     </div>
 
-    <button
-      class="secondary restart"
-      onclick="restartAssessment()"
-    >
-      Restart Assessment / إعادة التقييم
-    </button>
+    <div class="results-actions">
+      <button id="backBtn" class="secondary" type="button">
+        <span class="ar">العودة للتقييم</span>
+        <span class="sep">/</span>
+        <span class="en">Back to assessment</span>
+      </button>
+
+      <button class="ghost" type="button" onclick="restartAssessment()">
+        <span class="ar">إعادة التقييم</span>
+        <span class="sep">/</span>
+        <span class="en">Restart Assessment</span>
+      </button>
+    </div>
 
   </section>
 
 </main>
 
-
 <footer>
-  Wa7ed Technology Advisory • Your External Technology Office
+  <span class="ar">و1حد للاستشارات التقنية، مكتبك التقني الخارجي</span>
+  <span class="sep">|</span>
+  <span class="en">Wa7ed Technology Advisory, your external technology office</span>
 </footer>
-
 
 <script src="questions.js"></script>
 <script src="app.js"></script>
