@@ -1,92 +1,225 @@
-let currentSection = 0;
+/* =========================================================
+   WA7ED ASSESSMENT APPLICATION
+========================================================= */
+
+
+let currentSection =
+  Number(
+    localStorage.getItem(
+      "wa7edCurrentSection"
+    )
+  ) || 0;
+
 
 let answers =
-  JSON.parse(localStorage.getItem("wa7edAnswers")) || {};
+  JSON.parse(
+    localStorage.getItem(
+      "wa7edAnswers"
+    )
+  ) || {};
+
 
 let notes =
-  JSON.parse(localStorage.getItem("wa7edNotes")) || {};
+  JSON.parse(
+    localStorage.getItem(
+      "wa7edNotes"
+    )
+  ) || {};
+
 
 let language =
-  localStorage.getItem("wa7edLanguage") || "both";
+  localStorage.getItem(
+    "wa7edLanguage"
+  ) || "both";
+
+
+
+/* =========================================================
+   DOM ELEMENTS
+========================================================= */
 
 
 const questionsContainer =
-  document.getElementById("questionsContainer");
+  document.getElementById(
+    "questionsContainer"
+  );
+
 
 const sectionHeader =
-  document.getElementById("sectionHeader");
+  document.getElementById(
+    "sectionHeader"
+  );
+
 
 const sectionMenu =
-  document.getElementById("sectionMenu");
+  document.getElementById(
+    "sectionMenu"
+  );
+
 
 const previousBtn =
-  document.getElementById("previousBtn");
+  document.getElementById(
+    "previousBtn"
+  );
+
 
 const nextBtn =
-  document.getElementById("nextBtn");
+  document.getElementById(
+    "nextBtn"
+  );
+
 
 const saveBtn =
-  document.getElementById("saveBtn");
+  document.getElementById(
+    "saveBtn"
+  );
+
 
 const languageSelect =
-  document.getElementById("languageSelect");
+  document.getElementById(
+    "languageSelect"
+  );
+
 
 const sectionNotes =
-  document.getElementById("sectionNotes");
+  document.getElementById(
+    "sectionNotes"
+  );
 
 
-languageSelect.value = language;
+languageSelect.value =
+  language;
+
+
+
+/* =========================================================
+   INIT
+========================================================= */
 
 
 function init() {
 
-  buildMenu();
+  if (
+    currentSection >=
+    assessmentSections.length
+  ) {
+
+    currentSection = 0;
+
+  }
+
+
   applyLanguage();
+
+  buildMenu();
+
   renderSection();
 
 }
+
+
+
+window.addEventListener(
+  "DOMContentLoaded",
+  init
+);
+
+
+
+/* =========================================================
+   SECTION MENU
+========================================================= */
 
 
 function buildMenu() {
 
   sectionMenu.innerHTML = "";
 
-  assessmentSections.forEach((section, index) => {
 
-    const item = document.createElement("div");
+  assessmentSections.forEach(
+    (section,index) => {
 
-    item.className =
-      "menu-item" +
-      (index === currentSection ? " active" : "");
 
-    item.innerHTML = `
-      <div class="ar">${index + 1}. ${section.titleAr}</div>
-      <div class="en">${index + 1}. ${section.titleEn}</div>
-    `;
+      const item =
+        document.createElement(
+          "div"
+        );
 
-    item.onclick = () => {
 
-      saveSectionNotes();
+      item.className =
+        "menu-item" +
+        (
+          index === currentSection
+            ? " active"
+            : ""
+        );
 
-      currentSection = index;
 
-      renderSection();
+      item.innerHTML = `
 
-    };
+        <div class="ar">
+          ${index + 1}.
+          ${section.titleAr}
+        </div>
 
-    sectionMenu.appendChild(item);
+        <div class="en">
+          ${index + 1}.
+          ${section.titleEn}
+        </div>
 
-  });
+      `;
+
+
+      item.onclick = () => {
+
+        saveSectionNotes();
+
+        currentSection =
+          index;
+
+
+        localStorage.setItem(
+          "wa7edCurrentSection",
+          currentSection
+        );
+
+
+        renderSection();
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+
+      };
+
+
+      sectionMenu.appendChild(
+        item
+      );
+
+    }
+  );
 
 }
+
+
+
+/* =========================================================
+   RENDER SECTION
+========================================================= */
 
 
 function renderSection() {
 
   const section =
-    assessmentSections[currentSection];
+    assessmentSections[
+      currentSection
+    ];
+
 
   buildMenu();
+
 
   sectionHeader.innerHTML = `
 
@@ -100,43 +233,82 @@ function renderSection() {
         ${section.titleEn}
       </h2>
 
-      <p class="ar">
-        ${section.descriptionAr || ""}
-      </p>
 
-      <p class="en">
-        ${section.descriptionEn || ""}
-      </p>
+      ${
+        section.descriptionAr
+          ? `
+            <p class="ar">
+              ${section.descriptionAr}
+            </p>
+          `
+          : ""
+      }
+
+
+      ${
+        section.descriptionEn
+          ? `
+            <p class="en">
+              ${section.descriptionEn}
+            </p>
+          `
+          : ""
+      }
 
     </div>
 
   `;
 
 
-  questionsContainer.innerHTML = "";
+
+  questionsContainer.innerHTML =
+    "";
 
 
-  section.questions.forEach((question, index) => {
+  section.questions.forEach(
+    (question,index) => {
 
-    questionsContainer.appendChild(
-      createQuestion(question, index)
-    );
+      questionsContainer.appendChild(
+        createQuestion(
+          question,
+          index
+        )
+      );
 
-  });
+    }
+  );
+
 
 
   sectionNotes.value =
-    notes[section.id] || "";
+    notes[
+      section.id
+    ] || "";
+
 
 
   previousBtn.disabled =
     currentSection === 0;
 
 
-  nextBtn.textContent =
-    currentSection === assessmentSections.length - 1
-      ? "View Results / عرض النتائج"
-      : "Next / التالي →";
+
+  if (
+    currentSection ===
+    assessmentSections.length - 1
+  ) {
+
+    nextBtn.textContent =
+      "View Results / عرض النتائج";
+
+  }
+
+  else {
+
+    nextBtn.textContent =
+      "Next / التالي →";
+
+  }
+
 
 
   updateProgress();
@@ -144,12 +316,26 @@ function renderSection() {
 }
 
 
-function createQuestion(question, index) {
+
+/* =========================================================
+   QUESTION RENDERING
+========================================================= */
+
+
+function createQuestion(
+  question,
+  index
+) {
+
 
   const div =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
-  div.className = "question";
+
+  div.className =
+    "question";
 
 
   let html = `
@@ -158,9 +344,11 @@ function createQuestion(question, index) {
       ${question.id}
     </div>
 
+
     <h3 class="ar">
       ${question.ar}
     </h3>
+
 
     <div class="english en">
       ${question.en}
@@ -169,99 +357,214 @@ function createQuestion(question, index) {
   `;
 
 
-  if (question.type === "scale") {
 
-    html += createScale(question);
+  if (
+    question.type ===
+    "scale"
+  ) {
+
+    html +=
+      createScale(
+        question
+      );
 
   }
 
 
-  if (question.type === "select") {
 
-    html += createSelect(question);
+  else if (
+    question.type ===
+    "select"
+  ) {
+
+    html +=
+      createSelect(
+        question
+      );
 
   }
 
 
-  div.innerHTML = html;
+
+  div.innerHTML =
+    html;
+
 
   return div;
 
 }
 
 
-function createScale(question) {
+
+/* =========================================================
+   SCALE
+========================================================= */
+
+
+function createScale(
+  question
+) {
+
 
   const labels = [
 
-    ["1","غير موجود"],
-    ["2","محدود"],
-    ["3","متوسط"],
-    ["4","جيد"],
-    ["5","متقدم"],
-    ["NA","N/A"]
+    [
+      "1",
+      "غير موجود",
+      "Not in place"
+    ],
+
+    [
+      "2",
+      "محدود",
+      "Partially"
+    ],
+
+    [
+      "3",
+      "متوسط",
+      "Inconsistent"
+    ],
+
+    [
+      "4",
+      "جيد",
+      "Established"
+    ],
+
+    [
+      "5",
+      "متقدم",
+      "Measured"
+    ],
+
+    [
+      "NA",
+      "لا ينطبق",
+      "N/A"
+    ]
 
   ];
+
 
 
   let html =
     `<div class="scale">`;
 
 
-  labels.forEach(([value,label]) => {
 
-    const checked =
-      answers[question.id] == value
+  labels.forEach(
+    (
+      [
+        value,
+        arabic,
+        english
+      ]
+    ) => {
+
+
+      const checked =
+        answers[
+          question.id
+        ] == value
+
         ? "checked"
+
         : "";
 
 
-    html += `
 
-      <label>
+      html += `
 
-        <input
-          type="radio"
-          name="${question.id}"
-          value="${value}"
-          ${checked}
-          onchange="saveAnswer(
-            '${question.id}',
-            this.value
-          )"
-        >
+        <label>
 
-        <span>
-          ${value}
-          <br>
-          <small>${label}</small>
-        </span>
+          <input
 
-      </label>
+            type="radio"
 
-    `;
+            name="${question.id}"
 
-  });
+            value="${value}"
+
+            ${checked}
+
+            onchange="
+              saveAnswer(
+                '${question.id}',
+                this.value
+              )
+            "
+          >
 
 
-  html += `</div>`;
+          <span>
+
+            <strong>
+              ${value}
+            </strong>
+
+            <br>
+
+            <small class="ar">
+              ${arabic}
+            </small>
+
+            <small class="en">
+              ${english}
+            </small>
+
+          </span>
+
+        </label>
+
+      `;
+
+    }
+  );
+
+
+
+  html +=
+    `</div>`;
+
 
   return html;
 
 }
 
 
-function createSelect(question) {
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+
+function createSelect(
+  question
+) {
+
 
   let html = `
 
     <select
+
       class="form-select"
+
       onchange="
-        saveAnswer('${question.id}',this.value);
-        checkOther('${question.id}',this.value);
+
+        saveAnswer(
+          '${question.id}',
+          this.value
+        );
+
+        checkOther(
+          '${question.id}',
+          this.value
+        );
+
       "
     >
+
 
       <option value="">
         Select / اختر
@@ -270,64 +573,105 @@ function createSelect(question) {
   `;
 
 
-  question.options.forEach(option => {
 
-    const value = option[0];
+  question.options.forEach(
+    option => {
 
-    const selected =
-      answers[question.id] === value
+
+      const value =
+        option[0];
+
+
+      const selected =
+        answers[
+          question.id
+        ] === value
+
         ? "selected"
+
         : "";
 
 
-    html += `
+      html += `
 
-      <option
-        value="${value}"
-        ${selected}
-      >
+        <option
+          value="${value}"
+          ${selected}
+        >
 
-        ${option[1]}
-        |
-        ${option[0]}
+          ${option[1]}
+          |
+          ${option[0]}
 
-      </option>
+        </option>
 
-    `;
+      `;
 
-  });
+    }
+  );
+
 
 
   html += `
+
     </select>
 
+
+
     <input
+
       id="${question.id}_other"
-      class="form-input other-input"
-      placeholder="Please specify / يرجى التوضيح"
-      value="${answers[question.id + "_other"] || ""}"
+
+      class="
+        form-input
+        other-input
+      "
+
+      placeholder="
+        Please specify /
+        يرجى التوضيح
+      "
+
+      value="${
+        answers[
+          question.id +
+          "_other"
+        ] || ""
+      }"
+
       onchange="
         saveAnswer(
           '${question.id}_other',
           this.value
         )
       "
+
     >
+
   `;
 
 
-  setTimeout(() => {
 
-    if (answers[question.id] === "Other") {
+  setTimeout(
+    () => {
 
-      checkOther(
-        question.id,
-        "Other"
-      );
+      if (
+        answers[
+          question.id
+        ] === "Other"
+      ) {
 
-    }
+        checkOther(
+          question.id,
+          "Other"
+        );
 
-  }, 20);
+      }
+
+    },
+
+    0
+  );
 
 
   return html;
@@ -335,16 +679,30 @@ function createSelect(question) {
 }
 
 
-function checkOther(questionId, value) {
+
+/* =========================================================
+   OTHER FIELD
+========================================================= */
+
+
+function checkOther(
+  questionId,
+  value
+) {
+
 
   const field =
     document.getElementById(
-      questionId + "_other"
+      questionId +
+      "_other"
     );
 
 
-  if (!field)
+  if (!field) {
+
     return;
+
+  }
 
 
   field.style.display =
@@ -355,215 +713,378 @@ function checkOther(questionId, value) {
 }
 
 
-function saveAnswer(id, value) {
 
-  answers[id] = value;
+/* =========================================================
+   SAVE ANSWERS
+========================================================= */
+
+
+function saveAnswer(
+  id,
+  value
+) {
+
+
+  answers[id] =
+    value;
+
 
   localStorage.setItem(
     "wa7edAnswers",
-    JSON.stringify(answers)
+    JSON.stringify(
+      answers
+    )
   );
+
 
   updateProgress();
 
 }
 
 
+
+/* =========================================================
+   SAVE NOTES
+========================================================= */
+
+
 function saveSectionNotes() {
 
-  const section =
-    assessmentSections[currentSection];
 
-  notes[section.id] =
+  const section =
+    assessmentSections[
+      currentSection
+    ];
+
+
+  notes[
+    section.id
+  ] =
     sectionNotes.value;
+
 
   localStorage.setItem(
     "wa7edNotes",
-    JSON.stringify(notes)
+    JSON.stringify(
+      notes
+    )
   );
 
 }
 
 
-previousBtn.onclick = () => {
 
-  saveSectionNotes();
-
-  if (currentSection > 0) {
-
-    currentSection--;
-
-    renderSection();
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-
-  }
-
-};
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
 
-nextBtn.onclick = () => {
-
-  saveSectionNotes();
-
-  if (
-    currentSection <
-    assessmentSections.length - 1
-  ) {
-
-    currentSection++;
-
-    renderSection();
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-
-  } else {
-
-    showResults();
-
-  }
-
-};
+previousBtn.onclick =
+  () => {
 
 
-saveBtn.onclick = () => {
+    saveSectionNotes();
 
-  saveSectionNotes();
 
-  alert(
-    "Progress saved successfully.\nتم حفظ التقدم."
-  );
+    if (
+      currentSection > 0
+    ) {
 
-};
+
+      currentSection--;
+
+
+      localStorage.setItem(
+        "wa7edCurrentSection",
+        currentSection
+      );
+
+
+      renderSection();
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+  };
+
+
+
+nextBtn.onclick =
+  () => {
+
+
+    saveSectionNotes();
+
+
+    if (
+      currentSection <
+      assessmentSections.length - 1
+    ) {
+
+
+      currentSection++;
+
+
+      localStorage.setItem(
+        "wa7edCurrentSection",
+        currentSection
+      );
+
+
+      renderSection();
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    else {
+
+      showResults();
+
+    }
+
+  };
+
+
+
+saveBtn.onclick =
+  () => {
+
+
+    saveSectionNotes();
+
+
+    localStorage.setItem(
+      "wa7edCurrentSection",
+      currentSection
+    );
+
+
+    alert(
+      "Progress saved successfully.\nتم حفظ التقدم بنجاح."
+    );
+
+  };
+
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
 
 
 function updateProgress() {
 
+
   const allQuestions =
-    assessmentSections
-      .flatMap(section =>
+    assessmentSections.flatMap(
+      section =>
         section.questions
-      );
+    );
 
 
   const answered =
     allQuestions.filter(
-      question =>
-        answers[question.id] !== undefined &&
-        answers[question.id] !== ""
+      question => {
+
+        return (
+
+          answers[
+            question.id
+          ] !== undefined
+
+          &&
+
+          answers[
+            question.id
+          ] !== ""
+
+        );
+
+      }
     ).length;
 
 
+
   const percent =
-    Math.round(
-      answered /
-      allQuestions.length *
-      100
-    );
+    allQuestions.length
+
+    ? Math.round(
+        (
+          answered /
+          allQuestions.length
+        )
+        * 100
+      )
+
+    : 0;
+
 
 
   document.getElementById(
     "progressBar"
   ).style.width =
-    percent + "%";
+    `${percent}%`;
+
 
 
   document.getElementById(
     "progressText"
   ).textContent =
-    percent + "%";
+    `${percent}%`;
+
 
 
   const section =
-    assessmentSections[currentSection];
+    assessmentSections[
+      currentSection
+    ];
+
 
 
   document.getElementById(
     "sectionName"
   ).textContent =
+
     language === "ar"
+
       ? section.titleAr
+
       : language === "en"
+
         ? section.titleEn
-        : section.titleAr +
-          " | " +
-          section.titleEn;
+
+        :
+          `${section.titleAr} | ${section.titleEn}`;
 
 }
 
 
+
+/* =========================================================
+   CALCULATE RESULTS
+========================================================= */
+
+
 function calculateResults() {
 
-  const results = [];
+
+  const results =
+    [];
 
 
   assessmentSections
-    .filter(section => section.scored)
-    .forEach(section => {
 
-      let total = 0;
-      let count = 0;
+    .filter(
+      section =>
+        section.scored
+    )
+
+    .forEach(
+      section => {
 
 
-      section.questions.forEach(question => {
+        let total =
+          0;
 
-        const value =
-          answers[question.id];
+
+        let count =
+          0;
+
+
+
+        section.questions.forEach(
+          question => {
+
+
+            const value =
+              answers[
+                question.id
+              ];
+
+
+
+            if (
+              value
+
+              &&
+              value !== "NA"
+            ) {
+
+
+              const numeric =
+                Number(
+                  value
+                );
+
+
+              if (
+                !Number.isNaN(
+                  numeric
+                )
+              ) {
+
+                total +=
+                  numeric;
+
+
+                count++;
+
+              }
+
+            }
+
+          }
+        );
+
 
 
         if (
-          value &&
-          value !== "NA"
+          count > 0
         ) {
 
-          const numeric =
-            Number(value);
+
+          const average =
+            total /
+            count;
 
 
-          if (!isNaN(numeric)) {
+          results.push({
 
-            total += numeric;
+            id:
+              section.id,
 
-            count++;
+            titleEn:
+              section.titleEn,
 
-          }
+            titleAr:
+              section.titleAr,
+
+            average,
+
+            percentage:
+              (
+                average /
+                5
+              )
+              * 100
+
+          });
 
         }
 
-      });
-
-
-      if (count > 0) {
-
-        const average =
-          total / count;
-
-        results.push({
-
-          id: section.id,
-
-          titleEn:
-            section.titleEn,
-
-          titleAr:
-            section.titleAr,
-
-          average,
-
-          percentage:
-            average / 5 * 100
-
-        });
-
       }
-
-    });
+    );
 
 
   return results;
@@ -571,64 +1092,150 @@ function calculateResults() {
 }
 
 
-function getMaturity(score) {
 
-  if (score <= 1.8)
-    return "Initial / مبدئي";
+/* =========================================================
+   MATURITY
+========================================================= */
 
-  if (score <= 2.6)
-    return "Developing / قيد التطوير";
 
-  if (score <= 3.4)
-    return "Defined / مُعرّف";
+function getMaturity(
+  score
+) {
 
-  if (score <= 4.2)
-    return "Managed / مُدار";
 
-  return "Optimized / مُحسن";
+  if (
+    score <= 1.8
+  ) {
+
+    return (
+      "Initial / مبدئي"
+    );
+
+  }
+
+
+  if (
+    score <= 2.6
+  ) {
+
+    return (
+      "Developing / قيد التطوير"
+    );
+
+  }
+
+
+  if (
+    score <= 3.4
+  ) {
+
+    return (
+      "Defined / مُعرّف"
+    );
+
+  }
+
+
+  if (
+    score <= 4.2
+  ) {
+
+    return (
+      "Managed / مُدار"
+    );
+
+  }
+
+
+  return (
+    "Optimized / مُحسن"
+  );
 
 }
 
 
+
+/* =========================================================
+   SHOW RESULTS
+========================================================= */
+
+
 function showResults() {
+
 
   const results =
     calculateResults();
 
 
-  if (results.length === 0) {
+
+  if (
+    results.length === 0
+  ) {
+
 
     alert(
+
       "Please answer some scored questions first.\nيرجى الإجابة على أسئلة التقييم أولاً."
+
     );
+
 
     return;
 
   }
 
 
+
   const overall =
     results.reduce(
-      (sum, result) =>
-        sum + result.average,
+
+      (
+        sum,
+        result
+      ) =>
+
+        sum +
+        result.average,
+
       0
+
     ) / results.length;
+
 
 
   const percentage =
     Math.round(
-      overall / 5 * 100
+      (
+        overall /
+        5
+      )
+      * 100
     );
 
 
-  document.querySelector(
-    ".assessment-layout"
-  ).classList.add("hidden");
+
+  document.getElementById(
+    "assessmentLayout"
+  ).classList.add(
+    "hidden"
+  );
+
 
 
   document.querySelector(
     ".hero"
-  ).classList.add("hidden");
+  ).classList.add(
+    "hidden"
+  );
+
+
+
+  document.querySelector(
+    ".brand-message"
+  ).classList.add(
+    "hidden"
+  );
+
 
 
   const resultPage =
@@ -642,43 +1249,89 @@ function showResults() {
   );
 
 
+
   document.getElementById(
     "overallScore"
   ).textContent =
-    percentage + "%";
+    `${percentage}%`;
+
+
+
+  const maturity =
+    getMaturity(
+      overall
+    );
+
 
 
   document.getElementById(
     "maturityLevel"
   ).textContent =
-    getMaturity(overall);
+    maturity;
 
 
-  renderDomainScores(results);
+
+  renderDomainScores(
+    results
+  );
 
 
-  const sorted =
-    [...results].sort(
-      (a,b) =>
+
+  const strengths =
+    [...results]
+
+    .sort(
+      (
+        a,
+        b
+      ) =>
         b.percentage -
         a.percentage
+    )
+
+    .slice(
+      0,
+      3
     );
 
 
+
+  const improvements =
+    [...results]
+
+    .sort(
+      (
+        a,
+        b
+      ) =>
+        a.percentage -
+        b.percentage
+    )
+
+    .slice(
+      0,
+      3
+    );
+
+
+
   renderStrengths(
-    sorted.slice(0,3)
+    strengths
   );
 
 
   renderImprovements(
-    [...results]
-      .sort(
-        (a,b) =>
-          a.percentage -
-          b.percentage
-      )
-      .slice(0,3)
+    improvements
   );
+
+
+
+  updateEmailLink(
+    percentage,
+    maturity,
+    improvements
+  );
+
 
 
   window.scrollTo({
@@ -689,7 +1342,16 @@ function showResults() {
 }
 
 
-function renderDomainScores(results) {
+
+/* =========================================================
+   DOMAIN RESULTS
+========================================================= */
+
+
+function renderDomainScores(
+  results
+) {
+
 
   const container =
     document.getElementById(
@@ -697,56 +1359,86 @@ function renderDomainScores(results) {
     );
 
 
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
 
-  results.forEach(result => {
 
-    const percent =
-      Math.round(
-        result.percentage
-      );
+  results.forEach(
+    result => {
 
 
-    container.innerHTML += `
+      const percent =
+        Math.round(
+          result.percentage
+        );
 
-      <div class="domain-row">
 
-        <strong>
-          ${result.titleAr}
-        </strong>
 
-        <br>
+      container.innerHTML += `
 
-        <small>
-          ${result.titleEn}
-        </small>
+        <div class="domain-row">
 
-        <strong style="float:right">
-          ${percent}%
-        </strong>
+          <div class="domain-heading">
 
-        <div class="domain-bar">
+            <div>
 
-          <div
-            class="domain-fill"
-            style="
-              width:${percent}%
-            "
-          ></div>
+              <strong>
+                ${result.titleAr}
+              </strong>
+
+              <br>
+
+              <small>
+                ${result.titleEn}
+              </small>
+
+            </div>
+
+
+            <strong>
+              ${percent}%
+            </strong>
+
+          </div>
+
+
+          <div class="domain-bar">
+
+            <div
+
+              class="domain-fill"
+
+              style="
+                width:
+                ${percent}%
+              "
+            >
+
+            </div>
+
+          </div>
 
         </div>
 
-      </div>
+      `;
 
-    `;
-
-  });
+    }
+  );
 
 }
 
 
-function renderStrengths(results) {
+
+/* =========================================================
+   STRENGTHS
+========================================================= */
+
+
+function renderStrengths(
+  results
+) {
+
 
   const container =
     document.getElementById(
@@ -759,7 +1451,9 @@ function renderStrengths(results) {
       result => `
 
         <p>
+
           ✓
+
           <strong>
             ${result.titleAr}
           </strong>
@@ -781,7 +1475,16 @@ function renderStrengths(results) {
 }
 
 
-function renderImprovements(results) {
+
+/* =========================================================
+   IMPROVEMENTS
+========================================================= */
+
+
+function renderImprovements(
+  results
+) {
+
 
   const container =
     document.getElementById(
@@ -794,7 +1497,9 @@ function renderImprovements(results) {
       result => `
 
         <p>
+
           →
+
           <strong>
             ${result.titleAr}
           </strong>
@@ -816,25 +1521,102 @@ function renderImprovements(results) {
 }
 
 
+
+/* =========================================================
+   EMAIL RESULTS REVIEW
+========================================================= */
+
+
+function updateEmailLink(
+  percentage,
+  maturity,
+  improvements
+) {
+
+
+  const button =
+    document.getElementById(
+      "reviewResultsButton"
+    );
+
+
+  const priorities =
+    improvements.map(
+      item =>
+        `${item.titleEn} (${Math.round(item.percentage)}%)`
+    ).join(
+      ", "
+    );
+
+
+
+  const subject =
+    encodeURIComponent(
+      "Wa7ed Assessment Results Review"
+    );
+
+
+
+  const body =
+    encodeURIComponent(
+
+`Hello Wa7ed Team,
+
+I would like to request a review of my assessment results.
+
+Overall Score: ${percentage}%
+Maturity Level: ${maturity}
+
+Priority Areas:
+${priorities}
+
+Company Name:
+Contact Name:
+Phone:
+
+Thank you.`
+
+    );
+
+
+
+  button.href =
+    `mailto:ahk565.work@gmail.com?subject=${subject}&body=${body}`;
+
+}
+
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+
 languageSelect.onchange =
   function() {
 
+
     language =
       this.value;
+
 
     localStorage.setItem(
       "wa7edLanguage",
       language
     );
 
+
     applyLanguage();
+
 
     renderSection();
 
-};
+  };
+
 
 
 function applyLanguage() {
+
 
   document.body.classList.remove(
     "ar-only",
@@ -842,67 +1624,121 @@ function applyLanguage() {
   );
 
 
-  if (language === "ar") {
+
+  if (
+    language === "ar"
+  ) {
+
 
     document.body.classList.add(
       "ar-only"
     );
 
+
     document.documentElement.dir =
       "rtl";
 
+
+    document.documentElement.lang =
+      "ar";
+
   }
 
-  else if (language === "en") {
+
+
+  else if (
+    language === "en"
+  ) {
+
 
     document.body.classList.add(
       "en-only"
     );
 
+
     document.documentElement.dir =
       "ltr";
+
+
+    document.documentElement.lang =
+      "en";
 
   }
 
+
+
   else {
+
 
     document.documentElement.dir =
       "ltr";
+
+
+    document.documentElement.lang =
+      "en";
 
   }
 
 }
 
 
+
+/* =========================================================
+   RESTART
+========================================================= */
+
+
 function restartAssessment() {
+
 
   const confirmRestart =
     confirm(
+
       "Delete all answers and restart?\nحذف جميع الإجابات وإعادة التقييم؟"
+
     );
 
 
-  if (!confirmRestart)
+
+  if (
+    !confirmRestart
+  ) {
+
     return;
+
+  }
+
 
 
   localStorage.removeItem(
     "wa7edAnswers"
   );
 
+
   localStorage.removeItem(
     "wa7edNotes"
   );
 
 
-  answers = {};
-  notes = {};
+  localStorage.removeItem(
+    "wa7edCurrentSection"
+  );
 
-  currentSection = 0;
 
-  location.reload();
+
+  answers =
+    {};
+
+
+  notes =
+    {};
+
+
+  currentSection =
+    0;
+
+
+
+  window.location.reload();
 
 }
-
-
-init();
