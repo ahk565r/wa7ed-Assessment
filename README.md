@@ -147,7 +147,13 @@ Important:
 ---
 
 ## Current Features
-
+- Branded executive interface
+- Wa7ed brand colors
+- Brand message and positioning
+- Contact integration
+- Results review email
+- Automatic inclusion of assessment score in review email
+- Current section recovery after browser refresh
 - Arabic and English support
 - RTL / LTR support
 - Responsive mobile layout
