@@ -186,10 +186,7 @@ function buildMenu() {
 
         renderSection();
 
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        });
+      scrollToFirstQuestion();
 
       };
 
@@ -773,11 +770,57 @@ function saveSectionNotes() {
 }
 
 
+function scrollToFirstQuestion() {
 
+  setTimeout(() => {
+
+    const firstQuestion =
+      document.querySelector(
+        "#questionsContainer .question"
+      );
+
+    if (!firstQuestion) return;
+
+    const y =
+      firstQuestion.getBoundingClientRect().top +
+      window.pageYOffset -
+      120;
+
+    window.scrollTo({
+      top: y,
+      behavior: "smooth"
+    });
+
+  }, 50);
+
+}
 /* =========================================================
    NAVIGATION
 ========================================================= */
+function scrollToFirstQuestion() {
 
+  setTimeout(() => {
+
+    const firstQuestion =
+      document.querySelector(
+        "#questionsContainer .question"
+      );
+
+    if (!firstQuestion) return;
+
+    const y =
+      firstQuestion.getBoundingClientRect().top +
+      window.pageYOffset -
+      120;
+
+    window.scrollTo({
+      top: y,
+      behavior: "smooth"
+    });
+
+  }, 50);
+
+}
 
 previousBtn.onclick =
   () => {
@@ -803,10 +846,7 @@ previousBtn.onclick =
       renderSection();
 
 
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
+    scrollToFirstQuestion();
 
     }
 
@@ -839,10 +879,7 @@ nextBtn.onclick =
       renderSection();
 
 
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
+    scrollToFirstQuestion();
 
     }
 
@@ -1334,10 +1371,7 @@ function showResults() {
 
 
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+ scrollToFirstQuestion();
 
 }
 
