@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wa7ed Technology & AI Assessment</title>
 
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">و1حد</div>
+      <div>
+        <h1>Wa7ed Technology & AI Assessment</h1>
+        <p>Technology • AI • Cybersecurity • Regulatory Readiness</p>
+      </div>
+    </div>
+
+    <div class="language-switcher">
+      <button id="btn-en">English</button>
+      <button id="btn-ar">العربية</button>
+      <button id="btn-bilingual">AR + EN</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="intro-card">
+      <h2 id="assessment-title">
+        Technology & AI Maturity Assessment
+      </h2>
+
+      <h3 class="arabic">
+        تقييم نضج التقنية والذكاء الاصطناعي
+      </h3>
+
+      <p>
+        This assessment helps us understand your organization's current
+        technology maturity, risks, priorities and opportunities.
+      </p>
+
+      <p class="arabic">
+        يساعدنا هذا التقييم على فهم مستوى النضج التقني الحالي في منشأتكم،
+        والمخاطر والأولويات والفرص.
+      </p>
+
+      <div class="meta">
+        <span>Estimated time: 10–15 minutes</span>
+        <span class="arabic">الوقت المتوقع: 10–15 دقيقة</span>
+      </div>
+    </section>
+
+    <section class="progress-section">
+      <div class="progress-info">
+        <span id="section-label">Section 1 of 10</span>
+        <span id="progress-percent">10%</span>
+      </div>
+
+      <div class="progress-bar">
+        <div id="progress-fill"></div>
+      </div>
+    </section>
+
+    <section class="assessment-layout">
+      <aside id="section-navigation" class="sidebar">
+        <!-- Sections will be generated from app.js -->
+      </aside>
+
+      <section class="assessment-panel">
+        <div id="question-container">
+          <!-- Questions will be generated dynamically -->
+        </div>
+
+        <div class="navigation-buttons">
+          <button id="previous-btn" class="secondary-btn">
+            Previous / السابق
+          </button>
+
+          <button id="save-btn" class="secondary-btn">
+            Save Progress / حفظ التقدم
+          </button>
+
+          <button id="next-btn" class="primary-btn">
+            Next / التالي
+          </button>
+        </div>
+      </section>
+    </section>
+
+    <section id="results-section" class="results-section hidden">
+      <h2>Assessment Results</h2>
+      <h3 class="arabic">نتائج التقييم</h3>
+
+      <div class="results-grid">
+        <div class="result-card">
+          <h4>Overall Score</h4>
+          <p class="arabic">النتيجة الإجمالية</p>
+          <div id="overall-score" class="big-score">0%</div>
+        </div>
+
+        <div class="result-card">
+          <h4>Maturity Level</h4>
+          <p class="arabic">مستوى النضج</p>
+          <div id="maturity-level">-</div>
+        </div>
+      </div>
+
+      <div id="domain-results"></div>
+
+      <div class="results-columns">
+        <div>
+          <h3>Top Strengths</h3>
+          <h4 class="arabic">أبرز نقاط القوة</h4>
+          <ul id="strengths-list"></ul>
+        </div>
+
+        <div>
+          <h3>Improvement Areas</h3>
+          <h4 class="arabic">مجالات التحسين</h4>
+          <ul id="improvements-list"></ul>
+        </div>
+      </div>
+
+      <button id="review-btn" class="primary-btn">
+        Request Results Review / طلب مراجعة النتائج
+      </button>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      Wa7ed Technology Advisory
+      <span class="arabic">| و1حد للاستشارات التقنية</span>
+    </p>
+  </footer>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
