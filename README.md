@@ -1,11 +1,11 @@
-# Wa7ed Assessment
+# Wahed Assessment
 
 و1حد للتقييمات
 
 **Clearer Decisions. Greater Impact.**  
 **قرار أوضح. أثر أكبر.**
 
-Wa7ed Assessment is a bilingual Technology, AI, Cybersecurity and Regulatory Readiness Assessment platform for SMEs.
+Wahed Assessment is a bilingual Technology, AI, Cybersecurity and Regulatory Readiness Assessment platform for SMEs.
 
 The project helps organizations understand their current technology landscape, identify risks and priorities, and make clearer technology decisions.
 
@@ -148,7 +148,7 @@ Important:
 
 ## Current Features
 - Branded executive interface
-- Wa7ed brand colors
+- Wahed brand colors
 - Brand message and positioning
 - Contact integration
 - Results review email
@@ -194,7 +194,7 @@ For assessment review or technology advisory:
 
 Repository:
 
-`wa7ed-assessment`
+`Wahed-assessment`
 
 Publishing path:
 
@@ -202,7 +202,7 @@ Publishing path:
 
 Expected URL format:
 
-`https://USERNAME.github.io/wa7ed-assessment/`
+`https://USERNAME.github.io/Wahed-assessment/`
 
 ---
 
@@ -241,7 +241,7 @@ Use environment variables and secure secret management for future integrations.
 
 ## Long-Term Vision
 
-Wa7ed aims to evolve from a simple assessment tool into an independent technology advisory platform that helps businesses make better decisions across:
+Wahed aims to evolve from a simple assessment tool into an independent technology advisory platform that helps businesses make better decisions across:
 
 - Technology
 - Artificial Intelligence
