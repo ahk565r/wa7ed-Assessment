@@ -411,7 +411,7 @@ const assessmentSections = [
         "Infrastructure availability and performance are monitored appropriately.",
 
       ar:
-        "تتم مراقبة توفر وأداء البنية التحتية بشكل مناسب."
+        "تتم مراقبة توفر وأداء البنية التحتية بشكل مناسبه هل "
     },
 
 
